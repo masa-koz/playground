@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     uint64_t OldRecvCompletionLength = InterlockedExchangeAdd64(
         (int64_t*)&RecvCompletionLength,
         QUIC_STREAM_RECEIVE_CALL_ACTIVE_FLAG);
-    printf("OldRecvCompletionLength: %llu\n", OldRecvCompletionLength);
+    printf("OldRecvCompletionLength: %Iu\n", OldRecvCompletionLength);
 
     OldRecvCompletionLength = InterlockedExchangeAdd64(
         (int64_t*)&RecvCompletionLength,
@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) {
         NewRecvCompletionLength - OldRecvCompletionLength);
 
     OldRecvCompletionLength = OldRecvCompletionLength & (~QUIC_STREAM_RECEIVE_CALL_ACTIVE_FLAG);
-    printf("OldRecvCompletionLength: %llu\n", OldRecvCompletionLength);
-    printf("RecvCompletionLength: %llu\n", RecvCompletionLength);
+    printf("OldRecvCompletionLength: %Iu\n", OldRecvCompletionLength);
+    printf("RecvCompletionLength: %Iu\n", RecvCompletionLength);
 
     return 0; // Exit successfully
 }
