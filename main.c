@@ -1,11 +1,17 @@
 #ifndef Linux 
 #include <windows.h>
 #else
+#include <sys/types.h>
+int64_t
+InterlockedExchangeAdd64(
+    int64_t volatile *Addend,
+    int64_t Value
+    );
 inline
 int64_t
 InterlockedExchangeAdd64(
-    _Inout_ _Interlocked_operand_ int64_t volatile *Addend,
-    _In_ int64_t Value
+    int64_t volatile *Addend,
+    int64_t Value
     )
 {
     return __sync_fetch_and_add(Addend, Value);
@@ -23,7 +29,7 @@ int main(int argc, char *argv[]) {
     uint64_t OldRecvCompletionLength = InterlockedExchangeAdd64(
         (int64_t*)&RecvCompletionLength,
         QUIC_STREAM_RECEIVE_CALL_ACTIVE_FLAG);
-    printf("OldRecvCompletionLength: %I64u\n", OldRecvCompletionLength);
+    printf("OldRecvCompletionLength: %lu\n", OldRecvCompletionLength);
 
     OldRecvCompletionLength = InterlockedExchangeAdd64(
         (int64_t*)&RecvCompletionLength,
@@ -46,8 +52,8 @@ int main(int argc, char *argv[]) {
         NewRecvCompletionLength - OldRecvCompletionLength);
 
     OldRecvCompletionLength = OldRecvCompletionLength & (~QUIC_STREAM_RECEIVE_CALL_ACTIVE_FLAG);
-    printf("OldRecvCompletionLength: %I64u\n", OldRecvCompletionLength);
-    printf("RecvCompletionLength: %I64u\n", RecvCompletionLength);
+    printf("OldRecvCompletionLength: %lu\n", OldRecvCompletionLength);
+    printf("RecvCompletionLength: %lu\n", RecvCompletionLength);
 
     return 0; // Exit successfully
 }
